@@ -15,7 +15,7 @@ expertise=Accounting, Roller-coaster tycoon, Feierabend Bier
 education= MBA at Pfozheim hochschule, Bachelor of Science in International Economics from Texas Tech University  
 
 email=Ipseraar@hs-pforzheim.de
-linkedin=www.linkedin.com/in/aaron-ipser-075b0bb4
+linkedin=https://www.linkedin.com/in/aaron-ipser-075b0bb4
 
 about1= Current student in Germany looking for work in Germany
 about2= I have a back in accounting with 8 years of experience
