@@ -17,9 +17,9 @@ education= MBA at Pfozheim hochschule, Bachelor of Science in International Econ
 email=Ipseraar@hs-pforzheim.de
 linkedin=https://www.linkedin.com/in/aaron-ipser-075b0bb4
 
-about1= Current student in Germany looking for work in Germany
-about2= I have a back in accounting with 8 years of experience
-about3= learning new frontier of AI from Prof. Pin Laurn
+about1= Current student in Germany looking for work in Germany.
+about2= I have a back in accounting with 8 years of experience.
+about3= learning new frontier of AI from Prof. Pin Laurn.
 about4= 
 
 phone=+49 555 555 5555
