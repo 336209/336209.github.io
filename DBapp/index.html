@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#ec0016" />
+  <meta name="description" content="Interactive Next-Gen UI prototype for Deutsche Bahn (DB Navigator) across Baden-Württemberg featuring modular multi-leg route building, Deutschlandticket filtering, geospatial bus city-center bearings, and transit news." />
+  <meta property="og:title" content="DB Navigator Next-Gen — Baden-Württemberg Prototype" />
+  <meta property="og:description" content="Build custom multi-leg rail &amp; bus routes across Baden-Württemberg with Deutschlandticket filtering, interactive transit map, and Stadteinwärts/Stadtauswärts bus bearings." />
+  <meta property="og:type" content="website" />
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 48'%3E%3Crect x='3' y='3' width='58' height='42' rx='9' fill='%23ffffff' stroke='%23ec0016' stroke-width='6'/%3E%3Ctext x='32' y='33' text-anchor='middle' font-family='Arial,sans-serif' font-weight='900' font-size='26' fill='%23ec0016'%3EDB%3C/text%3E%3C/svg%3E" />
+  <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23ec0016'/%3E%3Crect x='6' y='12' width='52' height='40' rx='8' fill='%23ffffff'/%3E%3Ctext x='32' y='41' text-anchor='middle' font-family='Arial,sans-serif' font-weight='900' font-size='24' fill='%23ec0016'%3EDB%3C/text%3E%3C/svg%3E" />
+  <title>DB Navigator Next-Gen — Baden-Württemberg Interactive Prototype</title>
+  <link rel="stylesheet" href="./css/styles.css?v=5" />
+</head>
+<body>
+  <div class="workspace-shell">
+    <!-- Left Presentation & Demo Companion Panel -->
+    <aside class="companion-panel" aria-label="Prototype Controls and Scenarios">
+      <div class="companion-brand">
+        <span class="db-logo-mark" aria-hidden="true">DB</span>
+        <div>
+          <h1 class="companion-title">DB Navigator <span class="badge-next">Next-Gen</span></h1>
+          <p class="companion-subtitle">Baden-Württemberg Edition • 54 Stops &amp; 9 Bus Networks</p>
+        </div>
+      </div>
+
+      <div class="companion-card">
+        <div class="card-eyebrow">Data Pipeline Status</div>
+        <div id="api-status-indicator" class="api-status-pill status-checking">
+          <span class="status-dot"></span>
+          <span id="api-status-text">Checking v6.db.transport.rest…</span>
+        </div>
+        <p class="companion-help">
+          Combines live Deutsche Bahn HAFAS routing with a statewide <strong>bwtarif + 22-Verbund</strong> timetable graph (Mannheim &amp; Heidelberg to Freiburg, Ulm &amp; Konstanz) and geospatial <strong>Stadteinwärts / Stadtauswärts</strong> bus bearings.
+        </p>
+        <div class="mode-switch-row">
+          <button id="btn-mode-auto" class="chip-btn active" type="button">Auto (Live + BW Graph)</button>
+          <button id="btn-mode-stuttgart" class="chip-btn" type="button">BW Showcase Sim</button>
+        </div>
+      </div>
+
+      <div class="companion-card">
+        <div class="card-eyebrow">1-Click Baden-Württemberg Scenarios</div>
+        <div class="scenario-list">
+          <button class="scenario-btn" data-scenario="schwarzwald-bodensee" type="button">
+            <span class="scenario-tag">Schwarzwald + Bodensee Bus</span>
+            <strong>Karlsruhe → Konstanz Universität</strong>
+            <span>RE 2 Schwarzwaldbahn + Roter Arnold Bus 9A (or Alt Corridor via Stuttgart)</span>
+          </button>
+          <button class="scenario-btn" data-scenario="s21-buffer" type="button">
+            <span class="scenario-tag">3-Leg Bus + Rail + S21 Buffer</span>
+            <strong>Tübingen WHO → Stuttgart → Ulm Hbf</strong>
+            <span>TÜBus 4 (Stadteinwärts) → MEX 18 → +22m S21 Safe Buffer → RE 5</span>
+          </button>
+          <button class="scenario-btn" data-scenario="ice-vs-dticket" type="button">
+            <span class="scenario-tag">Rheintalbahn Filter Demo</span>
+            <strong>Mannheim Hbf → Freiburg (ICE vs. D-Ticket)</strong>
+            <span>Starts with ICE 277 — toggle D-Ticket ON to switch to RE 73 + RE 7!</span>
+          </button>
+          <button class="scenario-btn" data-scenario="bus-explorer-bw" type="button">
+            <span class="scenario-tag">9 BW City Bus Networks</span>
+            <strong>Statewide City-Center Bus Explorer</strong>
+            <span>Inspect Toward/Away bearings in Heidelberg, Stuttgart, Freiburg, Ulm &amp; Konstanz</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="companion-footer">
+        <span>Coverage: <strong>All Baden-Württemberg (VVS, VRN, KVV, RVF, bodo, DING, naldo, HNV)</strong></span>
+        <span>Bus City Anchors: <strong>23 Historic City Centers Statewide</strong></span>
+      </div>
+    </aside>
+
+    <!-- Centered Smartphone Device Frame -->
+    <main class="phone-stage">
+      <div class="phone-device" role="application" aria-label="DB Navigator Mobile Prototype">
+        <!-- Hardware Notch & Status Bar -->
+        <div class="phone-statusbar">
+          <span id="phone-clock" class="phone-time">13:25</span>
+          <div class="phone-notch" aria-hidden="true"></div>
+          <div class="phone-signals" aria-hidden="true">
+            <span>5G</span>
+            <svg width="15" height="11" viewBox="0 0 15 11" fill="currentColor"><rect x="0.5" y="1" width="12" height="9" rx="2" stroke="currentColor" stroke-width="1.2" fill="none"/><rect x="2" y="2.5" width="8.5" height="6" rx="1"/><rect x="13.2" y="3.5" width="1.3" height="4" rx="0.6"/></svg>
+          </div>
+        </div>
+
+        <!-- Top DB App Header -->
+        <header class="app-header">
+          <div class="db-top-stripe" aria-hidden="true"></div>
+          <div class="app-header-row">
+            <div class="app-brand">
+              <span class="db-logo-small">DB</span>
+              <div>
+                <div class="app-header-title" id="header-view-title">Build Your Route</div>
+                <div class="app-header-sub" id="header-view-sub">Baden-Württemberg • Suggested + Modular Edit</div>
+              </div>
+            </div>
+            <button id="btn-quick-dticket" class="dticket-header-pill active" type="button" title="Toggle Deutschlandticket Filter">
+              <span class="dticket-dot"></span>
+              <span>D-Ticket</span>
+            </button>
+          </div>
+        </header>
+
+        <!-- Scrollable Screen Viewport -->
+        <div id="app-viewport" class="app-viewport">
+          <!-- Rendered dynamically by js/app.js -->
+        </div>
+
+        <!-- Modal / Drawer Sheet Container inside Phone -->
+        <div id="phone-sheet-backdrop" class="phone-sheet-backdrop hidden">
+          <div id="phone-sheet-content" class="phone-sheet"></div>
+        </div>
+
+        <!-- Toast Notification inside Phone -->
+        <div id="phone-toast" class="phone-toast hidden" role="status" aria-live="polite"></div>
+
+        <!-- 4-Tab Bottom Navigation Bar -->
+        <nav class="app-tabbar" aria-label="Main Navigation">
+          <button class="tab-item active" data-tab="builder" type="button">
+            <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="6" cy="19" r="3"/><path d="M9 19h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15"/><circle cx="18" cy="5" r="3"/>
+            </svg>
+            <span>Build Route</span>
+            <span id="badge-legs-count" class="tab-badge hidden">0</span>
+          </button>
+
+          <button class="tab-item" data-tab="buses" type="button">
+            <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M8 6v6"/><path d="M15 6v6"/><path d="M2 12h19.6"/><path d="M18 18h3s.5-1.7.8-2.8c.1-.4.2-.8.2-1.2 0-.4-.1-.8-.2-1.2l-1.4-5C20.1 6.8 19.1 6 18 6H4a2 2 0 0 0-2 2v10h3"/><circle cx="7" cy="18" r="2"/><path d="M9 18h5"/><circle cx="16" cy="18" r="2"/>
+            </svg>
+            <span>Buses</span>
+          </button>
+
+          <button class="tab-item" data-tab="news" type="button">
+            <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2"/><path d="M18 14h-8"/><path d="M15 18h-5"/><path d="M10 6h8v4h-8V6Z"/>
+            </svg>
+            <span>News</span>
+            <span id="badge-news-alert" class="tab-badge alert">4</span>
+          </button>
+
+          <button class="tab-item" data-tab="trips" type="button">
+            <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z"/><path d="M13 5v2"/><path d="M13 17v2"/><path d="M13 11v2"/>
+            </svg>
+            <span>My Trips</span>
+            <span id="badge-trips-count" class="tab-badge">1</span>
+          </button>
+        </nav>
+      </div>
+    </main>
+  </div>
+
+  <script defer src="./js/bundle.js?v=5"></script>
+</body>
+</html>
